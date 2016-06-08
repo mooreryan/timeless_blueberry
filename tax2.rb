@@ -5,25 +5,21 @@ abort_unless ARGV.count == 1,
              "USAGE: tax.rb uniref50_ids.txt"
 
 # all these files were downloaded on 2016-06-05
-nodes = "assets/nodes.dmp.gz"
-names = "assets/names.dmp.gz"
+nodes_f = "assets/nodes.dmp"
+names_f = "assets/names.dmp"
 
 names = {}
-File.open(names, "rt").each_line do |line|
-  taxid, name, uniq_name, _ = line.chomp.split("\t|\t")
+File.open(names_f, "rt").each_line do |line|
+  taxid, name, uniq_name, type = line.chomp.split("\t|\t")
 
-  abort_if names.has_key?(taxid), "#{taxid} is repeated in #{names}"
-
-  if uniq_name.emtpy?
+  if type.match "scientific name"
     names[taxid] = name
-  else
-    names[taxid] = uniq_name
   end
 end
 
 tax_graph = {}
 ranks = {}
-File.open(nodes, "rt").each_line do |line|
+File.open(nodes_f, "rt").each_line do |line|
   ary = line.chomp.split("\t|\t")
   taxid = ary[0]
   parent_taxid = ary[1]
