@@ -62,8 +62,14 @@ user_taxids.each do |taxid|
   n+=1;STDERR.printf("Making tax strings: %d\r",n) if (n%100).zero?
   rest_ranks = []
   rest_names = []
-  abort_unless ranks[taxid], "#{taxid} not in ranks hash"
-  abort_unless names[taxid], "#{taxid} not in names hash"
+  # abort_unless ranks[taxid], "#{taxid} not in ranks hash" # actually, uniprot still has some old ncbi taxonomy ids in their ftp so if a taxid isn't in the ranks hash, it could mean that it is an old id
+  unless ranks[taxid]
+    warn "#{taxid} was not in the #{nodes_f} file"
+  end
+  unless names[taxid]
+    warn "#{taxid} was not in the #{names_f} file"
+  end
+#  abort_unless names[taxid], "#{taxid} not in names hash"
 
   the_taxid = taxid
   first_rank = ranks[taxid]
