@@ -12,6 +12,12 @@ CREATE TABLE tax_name(
   tax_name_unique TEXT
 );
 
+CREATE TABLE uniref50_to_taxonomy(
+  ID INT PRIMARY KEY NOT NULL,
+  uniref50 TEXT,
+  ncbi_taxon TEXT
+);
+
 CREATE TABLE id_mapping(
   ID INT PRIMARY KEY NOT NULL,
   uniprotkb_ac TEXT,
