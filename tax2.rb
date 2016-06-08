@@ -9,7 +9,9 @@ nodes_f = "assets/nodes.dmp"
 names_f = "assets/names.dmp"
 
 names = {}
+n=0
 File.open(names_f, "rt").each_line do |line|
+  n+=1;STDERR.printf("Reading names: %d\r",n) if (n%10_000).zero?
   taxid, name, uniq_name, type = line.chomp.split("\t|\t")
 
   if type.match "scientific name"
@@ -19,7 +21,9 @@ end
 
 tax_graph = {}
 ranks = {}
+n = 0
 File.open(nodes_f, "rt").each_line do |line|
+  n+=1;STDERR.printf("Reading nodes: %d\r",n) if (n%10_000).zero?
   ary = line.chomp.split("\t|\t")
   taxid = ary[0]
   parent_taxid = ary[1]
@@ -34,7 +38,9 @@ end
 taxids_f = ARGV[0]
 
 user_taxids = []
+n = 0
 File.open(taxids_f).each_line do |line|
+  n+=1;STDERR.printf("Reading taxids: %d\r",n) if (n%10_000).zero?
   id, uid, tid = line.chomp.split("|")
   user_taxids << tid
 end
@@ -42,7 +48,9 @@ end
 user_taxids.uniq!
 
 # from taxids get the tax string
+n = 0
 user_taxids.each do |taxid|
+  n+=1;STDERR.printf("Making tax strings: %d\r",n) if (n%10_000).zero?
   rest_ranks = []
   rest_names = []
   abort_unless ranks[taxid], "#{taxid} not in ranks hash"
