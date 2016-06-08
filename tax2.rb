@@ -1,6 +1,8 @@
 require "abort_if"
 include AbortIf
 
+GUARD = 100
+
 abort_unless ARGV.count == 1,
              "USAGE: tax.rb uniref50_ids.txt"
 
@@ -53,7 +55,6 @@ user_taxids.uniq!
 STDERR.puts "Unique user_taxids: #{user_taxids.count}"
 
 # from taxids get the tax string
-GUARD = 20
 iters = 0
 n = 0
 user_taxids.each do |taxid|
@@ -68,12 +69,17 @@ user_taxids.each do |taxid|
   first_name = names[taxid]
   while (parentid = tax_graph[the_taxid])
     iters += 1
-    if iters > GUARD
-      abort "Infinte loop? Check #{taxid}, #{parentid}, #{first_rank}, #{first_name}"
-    end
     rest_ranks << ranks[parentid]
     rest_names << names[parentid]
     the_taxid = parentid
+
+    if the_taxid == 1 || the_taxid == "1" # the parent of the root is the root itself
+      break
+    end
+
+    if iters > GUARD
+      abort "Infinte loop? Check #{taxid}, #{parentid}, #{first_rank}, #{first_name}, #{rest_ranks.inspect}, #{rest_names.inspect}"
+    end
   end
 
   all_ranks = [first_rank, rest_ranks].flatten
