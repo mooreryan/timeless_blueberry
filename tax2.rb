@@ -58,6 +58,7 @@ STDERR.puts "Unique user_taxids: #{user_taxids.count}"
 iters = 0
 n = 0
 user_taxids.each do |taxid|
+  iters = 0
   n+=1;STDERR.printf("Making tax strings: %d\r",n) if (n%100).zero?
   rest_ranks = []
   rest_names = []
