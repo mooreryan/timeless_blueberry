@@ -1,6 +1,15 @@
 require "abort_if"
 include AbortIf
 
+tax_levels = ["superkingdom",
+              "phylum",
+              "class",
+              "order",
+              "family",
+              "genus",
+              "species",
+             ]
+
 GUARD = 100
 
 abort_unless ARGV.count == 1,
@@ -57,6 +66,7 @@ STDERR.puts "Unique user_taxids: #{user_taxids.count}"
 # from taxids get the tax string
 iters = 0
 n = 0
+puts ["taxid", tax_levels].flatten.join "\t"
 user_taxids.each do |taxid|
   iters = 0
   n+=1;STDERR.printf("Making tax strings: %d\r",n) if (n%100).zero?
@@ -92,6 +102,13 @@ user_taxids.each do |taxid|
   all_ranks = [first_rank, rest_ranks].flatten
   all_names = [first_name, rest_names].flatten
 
-  puts [taxid, all_ranks.zip(all_names)].flatten.join "\t"
+  the_hash = Hash[*all_ranks.zip(all_names).flatten]
+  the_hash.default = "NA"
+
+  tax_ary = tax_levels.map do |level|
+    the_hash[level]
+  end
+
+  puts [taxid, tax_ary].flatten.join "\t"
 end
 STDERR.puts "\n"
