@@ -12,5 +12,5 @@ end
 File.open(names_f).each_line do |line|
   id, taxid, taxname, _ = line.chomp.split "\t"
 
-  puts [taxid, taxname].join("\t") if ids.include(taxid)
+  puts [taxid, taxname].join("\t") if ids.include?(taxid)
 end
