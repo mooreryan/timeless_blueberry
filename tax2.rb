@@ -1,4 +1,5 @@
 require "abort_if"
+include AbortIf
 
 abort_unless ARGV.count == 1,
              "USAGE: tax.rb uniref50_ids.txt"
