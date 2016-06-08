@@ -34,6 +34,16 @@ File.open(nodes, "rt").each_line do |line|
   ranks[taxid] = rank
 end
 
+taxids_f = ARGV[0]
+
+user_taxids = []
+File.open(taxids_f).each_line do |line|
+  id, uid, tid = line.chomp.split("|")
+  user_taxids << tid
+end
+
+user_taxids.uniq!
+
 # from taxids get the tax string
 user_taxids.each do |taxid|
   rest_ranks = []
