@@ -18,6 +18,7 @@ File.open(names_f, "rt").each_line do |line|
     names[taxid] = name
   end
 end
+STDERR.puts "\n"
 
 tax_graph = {}
 ranks = {}
@@ -34,6 +35,7 @@ File.open(nodes_f, "rt").each_line do |line|
   tax_graph[taxid] = parent_taxid
   ranks[taxid] = rank
 end
+STDERR.puts "\n"
 
 taxids_f = ARGV[0]
 
@@ -44,13 +46,18 @@ File.open(taxids_f).each_line do |line|
   id, uid, tid = line.chomp.split("|")
   user_taxids << tid
 end
+STDERR.puts "\n"
 
 user_taxids.uniq!
 
+STDERR.puts "Unique user_taxids: #{user_taxids.count}"
+
 # from taxids get the tax string
+GUARD = 20
+iters = 0
 n = 0
 user_taxids.each do |taxid|
-  n+=1;STDERR.printf("Making tax strings: %d\r",n) if (n%10_000).zero?
+  n+=1;STDERR.printf("Making tax strings: %d\r",n) if (n%100).zero?
   rest_ranks = []
   rest_names = []
   abort_unless ranks[taxid], "#{taxid} not in ranks hash"
@@ -59,6 +66,10 @@ user_taxids.each do |taxid|
   first_rank = ranks[taxid]
   first_name = names[taxid]
   while (parentid = tax_graph[taxid])
+    iters += 1
+    if iters > GUARD
+      abort "Infinte loop? Check #{taxid}, #{parentid}, #{first_rank}, #{first_name}"
+    end
     rest_ranks << ranks[parentid]
     rest_names << names[parentid]
   end
@@ -68,3 +79,4 @@ user_taxids.each do |taxid|
 
   puts [taxid, all_ranks.zip(all_names)].flatten.join "\t"
 end
+STDERR.puts "\n"
