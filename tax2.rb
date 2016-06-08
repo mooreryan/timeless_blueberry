@@ -63,15 +63,17 @@ user_taxids.each do |taxid|
   abort_unless ranks[taxid], "#{taxid} not in ranks hash"
   abort_unless names[taxid], "#{taxid} not in names hash"
 
+  the_taxid = taxid
   first_rank = ranks[taxid]
   first_name = names[taxid]
-  while (parentid = tax_graph[taxid])
+  while (parentid = tax_graph[the_taxid])
     iters += 1
     if iters > GUARD
       abort "Infinte loop? Check #{taxid}, #{parentid}, #{first_rank}, #{first_name}"
     end
     rest_ranks << ranks[parentid]
     rest_names << names[parentid]
+    the_taxid = parentid
   end
 
   all_ranks = [first_rank, rest_ranks].flatten
