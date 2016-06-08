@@ -16,8 +16,8 @@ abort_unless ARGV.count == 1,
              "USAGE: tax.rb uniref50_ids.txt"
 
 # all these files were downloaded on 2016-06-05
-nodes_f = "assets/nodes.dmp"
-names_f = "assets/names.dmp"
+nodes_f = "#{File.dirname(__FILE__)}/assets/nodes.dmp"
+names_f = "#{File.dirname(__FILE__)}/assets/names.dmp"
 
 names = {}
 n=0
