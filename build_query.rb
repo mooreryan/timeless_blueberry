@@ -17,4 +17,4 @@ ids.each_with_index do |id, idx|
   end
 end
 
-puts ";"
+puts ");"
