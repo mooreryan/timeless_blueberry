@@ -10,7 +10,7 @@ ARGV.each do |fname|
     end
 
     tax_counts.each do |tax, count|
-      f.puts [(count / total.to_f).round(3), count, tax].join "\t"
+      f.puts [count / total.to_f, count, tax].join "\t"
     end
   end
 end
